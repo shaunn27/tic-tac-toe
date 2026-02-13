@@ -12,9 +12,9 @@ final class GameManager: ObservableObject {
     @Published var currentPlayer: Player = .x
     @Published var gameOver: Bool = false
     @Published var alertTitle: String = ""
-    @Published var xWins: Int = 0
-    @Published var oWins: Int = 0
-    @Published var draws: Int = 0
+    @Published private(set) var xWins: Int = 0
+    @Published private(set) var oWins: Int = 0
+    @Published private(set) var draws: Int = 0
 
     func makeMove(at index: Int) {
         guard !gameOver, board[index].isEmpty else { return }
