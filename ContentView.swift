@@ -11,6 +11,14 @@ struct ContentView: View {
                 .font(.largeTitle.bold())
                 .foregroundStyle(.primary)
 
+            // Scoreboard
+            HStack(spacing: 20) {
+                ScoreCard(player: "X", score: game.xWins, color: .blue)
+                ScoreCard(player: "Draws", score: game.draws, color: .gray)
+                ScoreCard(player: "O", score: game.oWins, color: .red)
+            }
+            .padding(.horizontal)
+
             Text("Current Player: \(game.currentPlayer.rawValue)")
                 .font(.title3)
                 .padding(.horizontal, 16)
@@ -39,6 +47,20 @@ struct ContentView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(.blue)
+            .padding(.horizontal, 24)
+
+            Button(action: {
+                withAnimation(.spring()) {
+                    game.resetScores()
+                }
+            }) {
+                Text("Reset Scores")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            }
+            .buttonStyle(.bordered)
+            .tint(.red)
             .padding(.horizontal, 24)
 
             Spacer()
@@ -71,5 +93,26 @@ struct ContentView: View {
             .frame(height: 90)
         }
         .disabled(!game.board[index].isEmpty || game.gameOver)
+    }
+}
+
+struct ScoreCard: View {
+    let player: String
+    let score: Int
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(player)
+                .font(.headline)
+                .foregroundColor(color)
+            Text("\(score)")
+                .font(.title.bold())
+                .foregroundColor(.primary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
