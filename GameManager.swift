@@ -12,6 +12,9 @@ final class GameManager: ObservableObject {
     @Published var currentPlayer: Player = .x
     @Published var gameOver: Bool = false
     @Published var alertTitle: String = ""
+    @Published private(set) var xWins: Int = 0
+    @Published private(set) var oWins: Int = 0
+    @Published private(set) var draws: Int = 0
 
     func makeMove(at index: Int) {
         guard !gameOver, board[index].isEmpty else { return }
@@ -21,9 +24,15 @@ final class GameManager: ObservableObject {
         if checkWin(for: currentPlayer.rawValue) {
             gameOver = true
             alertTitle = "\(currentPlayer.rawValue) Wins!"
+            if currentPlayer == .x {
+                xWins += 1
+            } else {
+                oWins += 1
+            }
         } else if board.allSatisfy({ !$0.isEmpty }) {
             gameOver = true
             alertTitle = "It's a Draw!"
+            draws += 1
         } else {
             currentPlayer = currentPlayer.next
         }
@@ -34,6 +43,12 @@ final class GameManager: ObservableObject {
         currentPlayer = .x
         gameOver = false
         alertTitle = ""
+    }
+
+    func resetScores() {
+        xWins = 0
+        oWins = 0
+        draws = 0
     }
 
     private func checkWin(for symbol: String) -> Bool {
